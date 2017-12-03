@@ -1,6 +1,7 @@
 #ifndef KALMAN_FILTER_H_
 #define KALMAN_FILTER_H_
 #include "Eigen/Dense"
+#include "tools.h"
 
 class KalmanFilter {
 public:
@@ -22,6 +23,12 @@ public:
 
   // measurement covariance matrix
   Eigen::MatrixXd R_;
+
+  //H(x) function
+  Eigen::VectorXd Hx_;
+
+  //function which required for the y value postrpocessing (for radar - it is to make sure that angle between -pi and pi)
+  void(*EkfYPostProcessingFunc)(Eigen::VectorXd &input);
 
   /**
    * Constructor
@@ -55,6 +62,7 @@ public:
   /**
    * Updates the state by using standard Kalman Filter equations
    * @param z The measurement at k+1
+   * @param H sensor specific matrix
    */
   void Update(const Eigen::VectorXd &z);
 
@@ -64,6 +72,9 @@ public:
    */
   void UpdateEKF(const Eigen::VectorXd &z);
 
+private:
+  Tools tools;
+  void UpdateGeneric(const Eigen::VectorXd &y);
 };
 
 #endif /* KALMAN_FILTER_H_ */

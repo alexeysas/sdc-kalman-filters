@@ -27,8 +27,13 @@ public:
   /**
   * A helper method to calculate Jacobians.
   */
-  MatrixXd CalculateJacobian(const VectorXd& x_state);
+  MatrixXd CalculateJacobian(const VectorXd& x_state, float* c1_cache = 0);
 
+  Eigen::VectorXd Hx(const Eigen::VectorXd &z, float* c1_cache = 0);
+
+  static void NormalizeAngle(Eigen::VectorXd &input);
 };
+
+typedef void(*YPostPorcessing)(Eigen::VectorXd input);
 
 #endif /* TOOLS_H_ */
